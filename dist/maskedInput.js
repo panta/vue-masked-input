@@ -59,6 +59,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    handleDelete: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -128,6 +132,7 @@ export default {
                 }
               }
             }
+            /* eslint-enable */
           });
         }
         [].concat(_toConsumableArray(this.$refs.input.value)).reduce(function (memo, item) {
@@ -222,18 +227,20 @@ export default {
         // delete
         case 46:
           e.preventDefault();
-          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
-            this.maskCore.setValue('');
-            this.maskCore.setSelection({
-              start: 0,
-              end: 0
-            });
-            this.$refs.input.selectionStart = this.maskCore.selection.start;
-            this.$refs.input.selectionEnd = this.maskCore.selection.start;
-          } else {
-            this.maskCore.backspace();
+          if (this.handleDelete) {
+            if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
+              this.maskCore.setValue('');
+              this.maskCore.setSelection({
+                start: 0,
+                end: 0
+              });
+              this.$refs.input.selectionStart = this.maskCore.selection.start;
+              this.$refs.input.selectionEnd = this.maskCore.selection.start;
+            } else {
+              this.maskCore.backspace();
+            }
+            this.updateToCoreState();
           }
-          this.updateToCoreState();
           break;
 
         default:
